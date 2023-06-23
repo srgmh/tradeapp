@@ -21,6 +21,6 @@ COPY --from=builder /usr/local/lib/python3.11/site-packages /usr/local/lib/pytho
 COPY entrypoint.sh .
 RUN chmod a+x ./entrypoint.sh
 
-COPY ./tradeapp_django /app
+COPY . /app
 
 ENTRYPOINT ["sh",  "entrypoint.sh"]
