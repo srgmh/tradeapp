@@ -1,4 +1,4 @@
-### `.env` example
+### `.env` example in root project directory
 
 ```
 # DJANGO_SECRET_KEY
