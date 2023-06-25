@@ -13,8 +13,6 @@ class Asset(models.Model):
 
     users = models.ManyToManyField(
         to=User, verbose_name='Users', related_name='assets', blank=True)
-    full_name = models.CharField(
-        verbose_name='Full name', max_length=100, )
     abbreviation = models.CharField(
         verbose_name='Abbreviation', max_length=10, unique=True, )
     price = models.DecimalField(
@@ -85,6 +83,8 @@ class Order(models.Model):
         verbose_name='Quantity', max_digits=19, decimal_places=10, )
     timestamp = models.DateTimeField(
         verbose_name='Timestamp', auto_now_add=True, )
+    is_completed = models.BooleanField(
+        default=False)
 
     class Meta:
         verbose_name_plural = 'Orders'
@@ -109,6 +109,8 @@ class PostponedOrder(Order):
         choices=PriceWayChoice.choices, blank=False, null=False, )
     expiration_date = models.DateTimeField(
         verbose_name='Expiration date', )
+    in_progress = models.BooleanField(
+        default=True)
 
     class Meta:
         verbose_name_plural = 'PostponedOrders'
