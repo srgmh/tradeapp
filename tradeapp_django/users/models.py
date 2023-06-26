@@ -13,15 +13,13 @@ class User(AbstractUser):
         analyst = 'analyst'
         user = 'user'
 
-    email = models.EmailField(
-        'E-mail', max_length=256, unique=True, validators=(validate_email,)
-    )
     role = models.CharField(
         verbose_name='User role',
         max_length=254,
         choices=RoleChoice.choices,
         blank=False,
         null=False,
+        default=RoleChoice.user,
     )
 
     class Meta:
