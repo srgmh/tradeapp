@@ -8,7 +8,15 @@ class CustomUserAdmin(UserAdmin):
 
     list_display = (
         'id',
-        'username',
         'email',
         'role',
+    )
+    add_fieldsets = (
+        (
+            None,
+            {
+                "classes": ("wide",),
+                "fields": ("email", "password1", "password2"),
+            },
+        ),
     )

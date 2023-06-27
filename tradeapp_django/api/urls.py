@@ -3,7 +3,7 @@ from drf_spectacular.views import (SpectacularAPIView, SpectacularRedocView,
                                    SpectacularSwaggerView)
 
 urlpatterns = [
-    path('', include('api_users.urls')),
+    path('auth/', include('api_users.old_urls')),
     path('schema/',
          SpectacularAPIView.as_view(), name='schema'),
     path('docs/',
