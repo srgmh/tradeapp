@@ -1,6 +1,7 @@
 import datetime
 
 import jwt
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.response import Response
@@ -8,8 +9,8 @@ from rest_framework.views import APIView
 
 from api_users.serializers import UserSerializer
 
-
 User = get_user_model()
+JWT_SECRET_KEY = settings.JWT_SECRET_KEY
 
 
 class RegisterView(APIView):
@@ -64,7 +65,7 @@ class UserView(APIView):
         if not token:
             raise AuthenticationFailed("User is not Authenticated")
         try:
-            payload = jwt.decode(token, 'secret', algorithms=['HS256'])
+            payload = jwt.decode(token, JWT_SECRET_KEY, algorithms=['HS256'])
         except jwt.ExpiredSignatureError:
             raise AuthenticationFailed("Token Expired")
 

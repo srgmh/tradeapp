@@ -34,6 +34,7 @@ LOCAL_APPS = [
 ]
 
 THIRD_PARTY_APPS = [
+    'drf_spectacular',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS + THIRD_PARTY_APPS
@@ -118,3 +119,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'users.User'
 
 JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY')
+
+REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'TRADEAPP API',
+    'DESCRIPTION': 'TRADEAPP description',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+}
