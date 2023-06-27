@@ -11,6 +11,7 @@ python-dotenv = "==1.0.0"
 isort = "*"
 flake8 = "*"
 black = "*"
+pyjwt = "==2.7.0"
 
 [dev-packages]
 

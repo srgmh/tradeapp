@@ -30,6 +30,7 @@ DJANGO_APPS = [
 LOCAL_APPS = [
     'users.apps.UsersConfig',
     'crypto.apps.CryptoConfig',
+    'api_users.apps.ApiUsersConfig',
 ]
 
 THIRD_PARTY_APPS = [
@@ -46,6 +47,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'api_users.utils.jwt_middleware.JWTMiddleware',
 ]
 
 ROOT_URLCONF = 'tradeapp_django.urls'
@@ -114,3 +116,5 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'users.User'
+
+JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY')
