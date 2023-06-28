@@ -16,6 +16,8 @@ JWT_SECRET_KEY = settings.JWT_SECRET_KEY
 
 class UserViewSet(viewsets.ViewSet):
 
+    serializer_class = UserSerializer
+
     @action(methods=['post'], detail=False)
     def register(self, request):
         serializer = UserSerializer(data=request.data)
@@ -43,7 +45,7 @@ class UserViewSet(viewsets.ViewSet):
 
         raise AuthenticationFailed('Invalid email or password')
 
-    @action(methods=['post'], detail=False)
+    @action(methods=['get'], detail=False)
     def refresh_token(self, request):
         refresh_token = request.headers.get('Authorization')
 

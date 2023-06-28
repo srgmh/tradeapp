@@ -32,7 +32,7 @@ class JWTMiddleware:
 
         path = request.path
         if path not in self.paths:
-            return None
+            return self.get_response(request)
 
         response = check_token(request)
         if response:
