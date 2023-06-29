@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 from typing import Optional
+from urllib.request import Request
 
 import jwt
 from django.conf import settings
@@ -13,7 +14,7 @@ User = get_user_model()
 class SafeJWTAuthentication:
 
     @staticmethod
-    def authenticate(request) -> Optional[User]:
+    def authenticate(request: Request) -> Optional[User]:
         """
         Checks if token is valid: return user object.
         """
@@ -47,17 +48,17 @@ class SafeJWTAuthentication:
                 'Authorization not found. '
                 'Please send a valid token in headers.')
 
-    @staticmethod
-    def generate_token(user_id: int, minutes_valid: int) -> str:
-        """
-        Generate JWT token by user_id and token expiration time.
-        """
 
-        expiry_time = datetime.utcnow() + timedelta(minutes=minutes_valid)
-        payload = {
-            'user_id': user_id,
-            'exp': expiry_time,
-        }
-        token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+def generate_token(user_id: int, minutes_valid: int) -> str:
+    """
+    Generate JWT token by user_id and token expiration time.
+    """
 
-        return token
+    expiry_time = datetime.utcnow() + timedelta(minutes=minutes_valid)
+    payload = {
+        'user_id': user_id,
+        'exp': expiry_time,
+    }
+    token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+
+    return token
