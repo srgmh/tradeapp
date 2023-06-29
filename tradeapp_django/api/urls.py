@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.urls import include, path
-from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView, \
-    SpectacularRedocView
+from drf_spectacular.views import (SpectacularAPIView, SpectacularRedocView,
+                                   SpectacularSwaggerView)
 
 import api_users.urls
 
@@ -17,7 +17,7 @@ if settings.DEBUG:
             name='schema',
         ),
         path(
-            'schema/swagger-ui/',
+            'docs/',
             SpectacularSwaggerView.as_view(url_name='schema'),
             name='swagger-ui',
         ),

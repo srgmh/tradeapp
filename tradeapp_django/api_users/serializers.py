@@ -9,11 +9,9 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'email', 'password', 'role']
-        extra_kwargs = {
-            'password': {'write_only': True},
-            'role': {'read_only': True},
-        }
+        fields = ['id', 'email', 'password', 'role', 'is_blocked']
+        read_only_fields = ('id', 'role', 'is_blocked')
+        write_only_fields = ('password', )
 
     def create(self, validated_data):
         """Password hashing before saving to database."""

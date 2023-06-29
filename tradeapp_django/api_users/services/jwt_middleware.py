@@ -1,7 +1,7 @@
-from django.contrib.auth import get_user_model
 from django.conf import settings
+from django.contrib.auth import get_user_model
 
-from api_users.services.token_services import check_token
+from api_users.services.token_services import SafeJWTAuthentication
 
 SECRET_KEY = settings.JWT_SECRET_KEY
 User = get_user_model()
@@ -21,7 +21,6 @@ class JWTMiddleware:
 
     include_paths = (
         '/api/users/refresh_token/',
-        '/api/users/profile/',
     )
 
     def __init__(self, get_response):
@@ -30,13 +29,8 @@ class JWTMiddleware:
 
     def __call__(self, request):
 
-        path = request.path
-        if path not in self.paths:
-            return self.get_response(request)
-
-        response = check_token(request)
-        if response:
-            return response
+        if request.path in self.include_paths:
+            request.user = SafeJWTAuthentication.authenticate(request)
 
         response = self.get_response(request)
         return response
