@@ -49,7 +49,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'api_users.services.jwt_middleware.JWTMiddleware',
+    'api_users.jwt_middleware.JWTMiddleware',
 ]
 
 ROOT_URLCONF = 'tradeapp_django.urls'
