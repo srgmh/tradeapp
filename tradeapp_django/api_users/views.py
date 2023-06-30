@@ -6,7 +6,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.request import Request
 from rest_framework.response import Response
 
-from api_users.serializers import UserSerializer, LoginSerializer
+from api_users.serializers import UserSerializer
 from api_users.services.token_service import TokenService
 
 User = get_user_model()
