@@ -31,6 +31,7 @@ LOCAL_APPS = [
     'users.apps.UsersConfig',
     'crypto.apps.CryptoConfig',
     'api_users.apps.ApiUsersConfig',
+    'api_crypto.apps.ApiCryptoConfig',
     'api.apps.ApiConfig',
 ]
 
