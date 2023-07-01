@@ -4,9 +4,11 @@ from drf_spectacular.views import (SpectacularAPIView, SpectacularRedocView,
                                    SpectacularSwaggerView)
 
 import api_users.urls
+import api_crypto.urls
 
 urlpatterns = [
     path('', include(api_users.urls)),
+    path('', include(api_crypto.urls))
 ]
 
 if settings.DEBUG:
