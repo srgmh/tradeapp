@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.db.models.signals import m2m_changed
 from django.dispatch import receiver
+
 from crypto.models import Asset, Suitcase, Wallet
 
 User = get_user_model()
