@@ -1,3 +1,6 @@
+from rest_framework.authentication import SessionAuthentication
+
+
 from typing import Optional
 from urllib.request import Request
 
@@ -5,6 +8,7 @@ import jwt
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from rest_framework.exceptions import AuthenticationFailed
+
 
 SECRET_KEY = settings.JWT_SECRET_KEY
 User = get_user_model()
@@ -46,3 +50,10 @@ class SafeJWTAuthentication:
             raise AuthenticationFailed(
                 'Authorization not found. '
                 'Please send a valid token in headers.')
+
+
+class CsrfExemptSessionAuthentication(SessionAuthentication):
+    """so that to avoid csrf missing error"""
+
+    def enforce_csrf(self, request):
+        pass

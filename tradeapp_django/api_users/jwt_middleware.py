@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.contrib.auth import get_user_model
 
-from api_users.safe_jwt_authentication import SafeJWTAuthentication
+from api_users.authentication import SafeJWTAuthentication
 
 SECRET_KEY = settings.JWT_SECRET_KEY
 User = get_user_model()

@@ -36,7 +36,14 @@ class UserViewSet(viewsets.ViewSet):
 
         user = authenticate(email=email, password=password)
 
-        access_token, refresh_token = TokenService.generate_token(user.id)
+        access_token, refresh_token = (
+            TokenService.generate_jwt_token(
+                user.id, settings.ACCESS_TOKEN_EXPIRATION_MINUTES
+            ),
+            TokenService.generate_jwt_token(
+                user.id, settings.REFRESH_TOKEN_EXPIRATION_MINUTES
+            ),
+        )
 
         return Response(
             {
@@ -49,8 +56,14 @@ class UserViewSet(viewsets.ViewSet):
     @action(methods=['get'], detail=False, url_path='refresh_token')
     def refresh_token(self, request: Request) -> Response:
 
-        access_token, refresh_token = TokenService.generate_token(
-            request.user.id)
+        access_token, refresh_token = (
+            TokenService.generate_jwt_token(
+                request.user.id, settings.ACCESS_TOKEN_EXPIRATION_MINUTES
+            ),
+            TokenService.generate_jwt_token(
+                request.user.id, settings.REFRESH_TOKEN_EXPIRATION_MINUTES
+            ),
+        )
 
         return Response(
             {
