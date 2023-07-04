@@ -30,9 +30,12 @@ DJANGO_APPS = [
 LOCAL_APPS = [
     'users.apps.UsersConfig',
     'crypto.apps.CryptoConfig',
+    'api_users.apps.ApiUsersConfig',
+    'api.apps.ApiConfig',
 ]
 
 THIRD_PARTY_APPS = [
+    'drf_spectacular',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS + THIRD_PARTY_APPS
@@ -46,6 +49,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'api_users.jwt_middleware.JWTMiddleware',
 ]
 
 ROOT_URLCONF = 'tradeapp_django.urls'
@@ -79,12 +83,6 @@ DATABASES = {
     }
 }
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -114,3 +112,23 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'users.User'
+
+JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY')
+
+
+ACCESS_TOKEN_EXPIRATION_MINUTES = 15
+REFRESH_TOKEN_EXPIRATION_MINUTES = 60 * 24 * 7
+
+REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+            'api_users.authentication.CsrfExemptSessionAuthentication',
+    ),
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'TRADEAPP API',
+    'DESCRIPTION': 'TRADEAPP',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+}
