@@ -5,6 +5,7 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 
 from api_crypto.serializers import AssetSerializer
+from api_users.authentication import SafeJWTAuthentication
 from crypto.models import Asset
 
 
@@ -14,6 +15,7 @@ class AssetViewSet(viewsets.GenericViewSet,
 
     queryset = Asset.objects.all()
     serializer_class = AssetSerializer
+    authentication_classes = (SafeJWTAuthentication, )
 
     @action(methods=['post'], detail=False, url_path='subscribe')
     def subscribe(self, request: Request) -> Response:

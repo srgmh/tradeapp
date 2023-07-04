@@ -6,6 +6,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.request import Request
 from rest_framework.response import Response
 
+from api_users.authentication import SafeJWTAuthentication
 from api_users.serializers import UserSerializer
 from api_users.services.token_service import TokenService
 
@@ -17,7 +18,9 @@ class UserViewSet(viewsets.ViewSet):
 
     serializer_class = UserSerializer
 
-    @action(methods=['post'], detail=False, url_path='register')
+    @action(methods=['post'],
+            detail=False,
+            url_path='register')
     def register(self, request: Request) -> Response:
         serializer = UserSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -25,7 +28,9 @@ class UserViewSet(viewsets.ViewSet):
         
         return Response({'User created!': serializer.data})
 
-    @action(methods=['post'], detail=False, url_path='login')
+    @action(methods=['post'],
+            detail=False,
+            url_path='login')
     def login(self, request: Request) -> Response:
 
         email = request.data.get('email')
@@ -53,7 +58,10 @@ class UserViewSet(viewsets.ViewSet):
             }
         )
 
-    @action(methods=['get'], detail=False, url_path='refresh_token')
+    @action(methods=['get'],
+            detail=False,
+            url_path='refresh_token',
+            authentication_classes=(SafeJWTAuthentication, ))
     def refresh_token(self, request: Request) -> Response:
 
         access_token, refresh_token = (

@@ -50,7 +50,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'api_users.jwt_middleware.JWTMiddleware',
+    # 'api_users.jwt_middleware.JWTMiddleware',
 ]
 
 ROOT_URLCONF = 'tradeapp_django.urls'
@@ -123,7 +123,7 @@ REFRESH_TOKEN_EXPIRATION_MINUTES = 60 * 24 * 7
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'DEFAULT_AUTHENTICATION_CLASSES': (
-            'api_users.authentication.CsrfExemptSessionAuthentication',
+        'api_users.authentication.CsrfExemptSessionAuthentication',
     ),
 }
 
