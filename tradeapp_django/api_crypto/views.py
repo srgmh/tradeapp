@@ -5,7 +5,7 @@ from rest_framework.response import Response
 
 from api_crypto.serializers import (AssetSerializer, SuitcaseSerializer,
                                     WalletSerializer)
-from api_crypto.services.AssestService import AssetService
+from api_crypto.services.assest_service import AssetService
 from api_users.authentication import SafeJWTAuthentication
 from crypto.models import Suitcase, Wallet
 
@@ -26,7 +26,7 @@ class AssetViewSet(viewsets.GenericViewSet,
         return Response(result)
 
     @action(methods=['post'], detail=False, url_path='unsubscribe')
-    def unsubscribe(self, request):
+    def unsubscribe(self, request: Request) -> Response:
 
         asset_id = request.data.get('asset_id', None)
         result = AssetService.unsubscribe(asset_id, request.user)
