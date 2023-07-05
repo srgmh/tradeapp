@@ -8,7 +8,7 @@ from rest_framework.response import Response
 
 from api_users.authentication import SafeJWTAuthentication
 from api_users.serializers import UserSerializer
-from api_users.services.TokenService import TokenService
+from api_users.services.token_service import TokenService
 
 User = get_user_model()
 JWT_SECRET_KEY = settings.JWT_SECRET_KEY
