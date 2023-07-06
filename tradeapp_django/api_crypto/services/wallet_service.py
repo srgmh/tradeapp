@@ -1,6 +1,6 @@
 from rest_framework.exceptions import ValidationError
 
-from crypto.models import Wallet, Asset, Suitcase
+from crypto.models import Asset, Suitcase, Wallet
 
 
 class WalletService:
