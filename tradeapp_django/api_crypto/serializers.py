@@ -1,7 +1,9 @@
 from rest_framework import serializers
 
+from api_crypto.services.suitcase_service import SuitcaseService
+from api_crypto.services.wallet_service import WalletService
 from api_users.serializers import UserSerializer
-from crypto.models import Asset, Suitcase, Wallet
+from crypto.models import Asset, Order, Suitcase, Wallet
 
 
 class AssetSerializer(serializers.ModelSerializer):
@@ -44,3 +46,15 @@ class SuitcaseSerializer(serializers.ModelSerializer):
         wallets = obj.wallets.all()
         wallet_serializer = WalletSerializer(wallets, many=True)
         return wallet_serializer.data
+
+
+class OrderSerializer(serializers.ModelSerializer):
+
+    quantity = serializers.DecimalField(max_digits=19, decimal_places=10,
+                                        coerce_to_string=False)
+
+    class Meta:
+        model = Order
+        fields = ('id', 'user', 'operation_type', 'asset',
+                  'quantity', 'timestamp', 'is_completed', )
+        read_only_fields = ('user', 'timestamp', 'is_completed')
