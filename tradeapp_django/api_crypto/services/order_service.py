@@ -2,7 +2,8 @@ from _decimal import Decimal
 from django.contrib.auth import get_user_model
 from rest_framework.exceptions import ValidationError
 
-from api_crypto.serializers import OrderSerializer
+from api_crypto.serializers import (OrderSerializer, SuitcaseSerializer,
+                                    WalletSerializer)
 from api_crypto.services.assest_service import AssetService
 from api_crypto.services.suitcase_service import SuitcaseService
 from api_crypto.services.wallet_service import WalletService
@@ -31,7 +32,7 @@ class OrderService:
         operation = operation_type_handlers.get(operation_type)
 
         if operation:
-            operation(
+            return operation(
                 user,
                 serializer,
                 suitcase,
@@ -63,7 +64,11 @@ class OrderService:
         wallet.balance -= quantity
         wallet.save()
 
-        serializer.save(user=user, is_completed=True)
+        order = serializer.save(user=user, is_completed=True)
+
+        response_data = OrderService._create_response(order, wallet, suitcase)
+
+        return response_data
 
     @staticmethod
     def _buy_asset(
@@ -86,4 +91,20 @@ class OrderService:
         wallet.balance += quantity
         wallet.save()
 
-        serializer.save(user=user, is_completed=True)
+        order = serializer.save(user=user, is_completed=True)
+
+        response_data = OrderService._create_response(order, wallet, suitcase)
+
+        return response_data
+
+    @staticmethod
+    def _create_response(order, wallet, suitcase):
+        order_serializer = OrderSerializer(order)
+        wallet_serializer = WalletSerializer(wallet)
+        suitcase_serializer = SuitcaseSerializer(suitcase)
+
+        return {
+            'order': order_serializer.data,
+            'wallet': wallet_serializer.data,
+            'suitcase': suitcase_serializer.data,
+        }
