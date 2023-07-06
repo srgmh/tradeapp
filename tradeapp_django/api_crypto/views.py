@@ -57,8 +57,7 @@ class SuitcaseViewSet(mixins.ListModelMixin,
         return Suitcase.objects.filter(user=user)
 
 
-class OrderViewSet(mixins.CreateModelMixin,
-                   mixins.ListModelMixin,
+class OrderViewSet(mixins.ListModelMixin,
                    viewsets.GenericViewSet):
 
     serializer_class = OrderSerializer
@@ -69,7 +68,8 @@ class OrderViewSet(mixins.CreateModelMixin,
 
         return Order.objects.filter(user=self.request.user)
 
-    def perform_create(self, request: Request):
+    @action(methods=['post'], detail=False, url_path='create_order')
+    def create_order(self, request: Request):
 
         operation_type = request.data.get('operation_type', None)
         asset = request.data.get('asset', None)
@@ -77,5 +77,12 @@ class OrderViewSet(mixins.CreateModelMixin,
         user = self.request.user
         serializer = self.get_serializer(data=request.data)
 
-        OrderService.create_order(serializer, user, operation_type, asset, quantity)
+        result = OrderService.create_order(
+            serializer,
+            user,
+            operation_type,
+            asset,
+            quantity
+        )
 
+        return Response(result)
