@@ -1,5 +1,7 @@
 from rest_framework import serializers
 
+from api_crypto.services.suitcase_service import SuitcaseService
+from api_crypto.services.wallet_service import WalletService
 from api_users.serializers import UserSerializer
 from crypto.models import Asset, Order, Suitcase, Wallet
 
