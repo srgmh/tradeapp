@@ -21,6 +21,8 @@ class JWTMiddleware:
 
     include_paths = (
         '/api/users/refresh_token/',
+        '/api/assets/subscribe/',
+        '/api/assets/unsubscribe/',
     )
 
     def __init__(self, get_response):

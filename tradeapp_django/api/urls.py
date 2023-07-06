@@ -3,10 +3,12 @@ from django.urls import include, path
 from drf_spectacular.views import (SpectacularAPIView, SpectacularRedocView,
                                    SpectacularSwaggerView)
 
+import api_crypto.urls
 import api_users.urls
 
 urlpatterns = [
     path('', include(api_users.urls)),
+    path('', include(api_crypto.urls))
 ]
 
 if settings.DEBUG:

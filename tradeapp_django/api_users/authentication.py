@@ -4,17 +4,17 @@ from urllib.request import Request
 import jwt
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from rest_framework.authentication import SessionAuthentication
+from rest_framework.authentication import (BaseAuthentication,
+                                           SessionAuthentication)
 from rest_framework.exceptions import AuthenticationFailed
 
 SECRET_KEY = settings.JWT_SECRET_KEY
 User = get_user_model()
 
 
-class SafeJWTAuthentication:
+class SafeJWTAuthentication(BaseAuthentication):
 
-    @staticmethod
-    def authenticate(request: Request) -> Optional[User]:
+    def authenticate(self, request: Request) -> Optional[User]:
         """
         Checks if token is valid, return user object.
         """
@@ -28,7 +28,7 @@ class SafeJWTAuthentication:
 
                 try:
                     user = User.objects.filter(id=payload['user_id']).first()
-                    return user
+                    return user, None
 
                 except User.DoesNotExist:
                     raise AuthenticationFailed(

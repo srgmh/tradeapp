@@ -17,6 +17,11 @@ ALLOWED_HOSTS = [
     'localhost',
 ]
 
+INTERNAL_IPS = [
+    '127.0.0.1',
+    '0.0.0.0',
+    'localhost',
+]
 
 DJANGO_APPS = [
     'django.contrib.admin',
@@ -31,11 +36,13 @@ LOCAL_APPS = [
     'users.apps.UsersConfig',
     'crypto.apps.CryptoConfig',
     'api_users.apps.ApiUsersConfig',
+    'api_crypto.apps.ApiCryptoConfig',
     'api.apps.ApiConfig',
 ]
 
 THIRD_PARTY_APPS = [
     'drf_spectacular',
+    'debug_toolbar',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS + THIRD_PARTY_APPS
@@ -44,12 +51,13 @@ INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS + THIRD_PARTY_APPS
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'api_users.jwt_middleware.JWTMiddleware',
+    # 'api_users.jwt_middleware.JWTMiddleware',
 ]
 
 ROOT_URLCONF = 'tradeapp_django.urls'
@@ -122,7 +130,7 @@ REFRESH_TOKEN_EXPIRATION_MINUTES = 60 * 24 * 7
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'DEFAULT_AUTHENTICATION_CLASSES': (
-            'api_users.authentication.CsrfExemptSessionAuthentication',
+        'api_users.authentication.CsrfExemptSessionAuthentication',
     ),
 }
 
@@ -131,4 +139,8 @@ SPECTACULAR_SETTINGS = {
     'DESCRIPTION': 'TRADEAPP',
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
+}
+
+DEBUG_TOOLBAR_CONFIG = {
+    'SHOW_TOOLBAR_CALLBACK': lambda request: DEBUG,
 }
