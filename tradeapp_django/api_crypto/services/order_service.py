@@ -1,5 +1,4 @@
 from _decimal import Decimal
-
 from django.contrib.auth import get_user_model
 from rest_framework.exceptions import ValidationError
 
@@ -7,7 +6,7 @@ from api_crypto.serializers import OrderSerializer
 from api_crypto.services.assest_service import AssetService
 from api_crypto.services.suitcase_service import SuitcaseService
 from api_crypto.services.wallet_service import WalletService
-from crypto.models import Suitcase, Wallet, Asset
+from crypto.models import Asset, Suitcase, Wallet
 
 
 class OrderService:

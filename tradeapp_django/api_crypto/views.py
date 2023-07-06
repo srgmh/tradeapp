@@ -1,4 +1,4 @@
-from rest_framework import mixins, viewsets, status
+from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -8,7 +8,7 @@ from api_crypto.serializers import (AssetSerializer, OrderSerializer,
 from api_crypto.services.assest_service import AssetService
 from api_crypto.services.order_service import OrderService
 from api_users.authentication import SafeJWTAuthentication
-from crypto.models import Suitcase, Wallet, Order
+from crypto.models import Order, Suitcase, Wallet
 
 
 class AssetViewSet(viewsets.GenericViewSet,
