@@ -1,5 +1,6 @@
 from _decimal import Decimal
 from django.contrib.auth import get_user_model
+from django.db.transaction import atomic
 from rest_framework.exceptions import ValidationError
 
 from api_crypto.serializers import (OrderSerializer, SuitcaseSerializer,
@@ -44,6 +45,7 @@ class OrderService:
             raise ValidationError("Invalid operation type.")
 
     @staticmethod
+    @atomic
     def _sell_asset(
             user: get_user_model(),
             serializer: OrderSerializer,
@@ -71,6 +73,7 @@ class OrderService:
         return response_data
 
     @staticmethod
+    @atomic
     def _buy_asset(
             user: get_user_model(),
             serializer: OrderSerializer,
