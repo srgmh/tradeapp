@@ -1,113 +1,79 @@
+from typing import Dict
+
 from _decimal import Decimal
 from django.contrib.auth import get_user_model
 from django.db.transaction import atomic
 from rest_framework.exceptions import ValidationError
+from rest_framework.generics import get_object_or_404
 
-from api_crypto.serializers import (OrderSerializer, SuitcaseSerializer,
-                                    WalletSerializer)
-from api_crypto.services.assest_service import AssetService
-from api_crypto.services.suitcase_service import SuitcaseService
-from api_crypto.services.wallet_service import WalletService
-from crypto.models import Asset, Suitcase, Wallet
+from crypto.models import Asset, Order, Suitcase, Wallet
 
 
 class OrderService:
 
     @staticmethod
-    def create_order(serializer: OrderSerializer,
-                     user: get_user_model(),
-                     operation_type: str,
-                     asset: int,
-                     quantity: Decimal):
-
-        serializer.is_valid(raise_exception=True)
-
-        asset = AssetService.get_asset(asset)
-        suitcase = SuitcaseService.get_suitcase(user)
-        wallet = WalletService.get_wallet(asset, suitcase)
-
-        operation_type_handlers = {
-            'sell': OrderService._sell_asset,
-            'buy': OrderService._buy_asset,
-        }
-        operation = operation_type_handlers.get(operation_type)
-
-        if operation:
-            return operation(
-                user,
-                serializer,
-                suitcase,
-                wallet,
-                asset,
-                quantity,
+    def create_order(
+            user: get_user_model(),
+            order: Order,
+            operation_type: str,
+            asset: Asset,
+            quantity: Decimal
+    ) -> Dict[str, bool]:
+        suitcase = get_object_or_404(Suitcase, user=user)
+        wallet = get_object_or_404(Wallet, suitcase=suitcase, asset=asset)
+        suitcase_exchanging_amount = quantity * asset.price
+        if operation_type == 'sell':
+            result = OrderService._sell_asset(
+                order, suitcase, wallet, quantity, suitcase_exchanging_amount
+            )
+        elif operation_type == 'buy':
+            result = OrderService._buy_asset(
+                order, suitcase, wallet, quantity, suitcase_exchanging_amount
             )
         else:
             raise ValidationError("Invalid operation type.")
 
+        return result
+
     @staticmethod
     @atomic
     def _sell_asset(
-            user: get_user_model(),
-            serializer: OrderSerializer,
+            order: Order,
             suitcase: Suitcase,
             wallet: Wallet,
-            asset: Asset,
             quantity: Decimal,
-    ):
-
+            suitcase_exchanging_amount: Decimal
+    ) -> Dict[str, bool]:
         if wallet.balance < quantity:
             raise ValidationError('Not enough asset quantity on wallet!')
-
-        required_amount = asset.price * quantity
-
-        suitcase.balance += required_amount
-        suitcase.save()
-
+        suitcase.balance += suitcase_exchanging_amount
         wallet.balance -= quantity
+        suitcase.save()
         wallet.save()
+        OrderService._set_order_status(order, True)
 
-        order = serializer.save(user=user, is_completed=True)
-
-        response_data = OrderService._create_response(order, wallet, suitcase)
-
-        return response_data
+        return {'success': True}
 
     @staticmethod
     @atomic
     def _buy_asset(
-            user: get_user_model(),
-            serializer: OrderSerializer,
+            order: Order,
             suitcase: Suitcase,
             wallet: Wallet,
-            asset: Asset,
             quantity: Decimal,
-    ):
-
-        required_amount = asset.price * quantity
-
-        if suitcase.balance < required_amount:
+            suitcase_exchanging_amount: Decimal
+    ) -> Dict[str, bool]:
+        if suitcase.balance < suitcase_exchanging_amount:
             raise ValidationError('Not enough balance on suitcase!')
-
-        suitcase.balance -= required_amount
-        suitcase.save()
-
+        suitcase.balance -= suitcase_exchanging_amount
         wallet.balance += quantity
+        suitcase.save()
         wallet.save()
+        OrderService._set_order_status(order, True)
 
-        order = serializer.save(user=user, is_completed=True)
-
-        response_data = OrderService._create_response(order, wallet, suitcase)
-
-        return response_data
+        return {'success': True}
 
     @staticmethod
-    def _create_response(order, wallet, suitcase):
-        order_serializer = OrderSerializer(order)
-        wallet_serializer = WalletSerializer(wallet)
-        suitcase_serializer = SuitcaseSerializer(suitcase)
-
-        return {
-            'order': order_serializer.data,
-            'wallet': wallet_serializer.data,
-            'suitcase': suitcase_serializer.data,
-        }
+    def _set_order_status(order: Order, status: bool) -> None:
+        order.is_completed = status
+        order.save()

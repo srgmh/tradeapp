@@ -20,7 +20,6 @@ class AssetViewSet(viewsets.GenericViewSet,
 
     @action(methods=['post'], detail=False, url_path='subscribe')
     def subscribe(self, request: Request) -> Response:
-
         asset_id = request.data.get('asset_id', None)
         result = AssetService.subscribe(asset_id, request.user)
 
@@ -28,7 +27,6 @@ class AssetViewSet(viewsets.GenericViewSet,
 
     @action(methods=['post'], detail=False, url_path='unsubscribe')
     def unsubscribe(self, request: Request) -> Response:
-
         asset_id = request.data.get('asset_id', None)
         result = AssetService.unsubscribe(asset_id, request.user)
 
@@ -65,21 +63,20 @@ class OrderViewSet(mixins.ListModelMixin,
 
     def get_queryset(self):
         """Get query set of orders created by current user."""
-
         return Order.objects.filter(user=self.request.user)
 
     @action(methods=['post'], detail=False, url_path='create_order')
     def create_order(self, request: Request):
-
-        operation_type = request.data.get('operation_type', None)
-        asset = request.data.get('asset', None)
-        quantity = request.data.get('quantity', None)
-        user = self.request.user
         serializer = self.get_serializer(data=request.data)
-
+        serializer.is_valid(raise_exception=True)
+        user = self.request.user
+        operation_type = serializer.validated_data['operation_type']
+        asset = serializer.validated_data['asset']
+        quantity = serializer.validated_data['quantity']
+        order = serializer.save(user=user)
         result = OrderService.create_order(
-            serializer,
             user,
+            order,
             operation_type,
             asset,
             quantity
