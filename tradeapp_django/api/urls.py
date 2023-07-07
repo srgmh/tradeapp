@@ -5,7 +5,6 @@ from drf_spectacular.views import (SpectacularAPIView, SpectacularRedocView,
 
 import api_crypto.urls
 import api_users.urls
-import api_crypto.urls
 
 urlpatterns = [
     path('', include(api_users.urls)),
