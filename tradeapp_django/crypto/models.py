@@ -108,7 +108,7 @@ class PostponedOrder(Order):
         verbose_name='Price way', max_length=254,
         choices=PriceWayChoice.choices, blank=False, null=False, )
     expiration_date = models.DateTimeField(
-        verbose_name='Expiration date', )
+        verbose_name='Expiration date', auto_now_add=True,)
     in_progress = models.BooleanField(
         default=True)
 

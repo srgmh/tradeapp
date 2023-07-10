@@ -43,6 +43,7 @@ LOCAL_APPS = [
 THIRD_PARTY_APPS = [
     'drf_spectacular',
     'debug_toolbar',
+    'django_celery_beat',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS + THIRD_PARTY_APPS
@@ -144,3 +145,13 @@ SPECTACULAR_SETTINGS = {
 DEBUG_TOOLBAR_CONFIG = {
     'SHOW_TOOLBAR_CALLBACK': lambda request: DEBUG,
 }
+
+CELERY_BROKER_URL = 'redis://redis:6379/0'
+CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
+CELERY_BEAT_SCHEDULE = {
+    'process_postponed_orders': {
+        'task': 'api_crypto.tasks.process_postponed_orders',
+        'schedule': 15.0,
+    },
+}
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'

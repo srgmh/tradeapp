@@ -4,11 +4,12 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 
 from api_crypto.serializers import (AssetSerializer, OrderSerializer,
-                                    SuitcaseSerializer, WalletSerializer)
+                                    SuitcaseSerializer, WalletSerializer,
+                                    PostponedOrderSerializer)
 from api_crypto.services.assest_service import AssetService
 from api_crypto.services.order_service import OrderService
 from api_users.authentication import SafeJWTAuthentication
-from crypto.models import Order, Suitcase, Wallet
+from crypto.models import Order, Suitcase, Wallet, PostponedOrder
 
 
 class AssetViewSet(viewsets.GenericViewSet,
@@ -83,3 +84,21 @@ class OrderViewSet(mixins.ListModelMixin,
         )
 
         return Response(result)
+
+
+class PostponedOrderViewSet(mixins.ListModelMixin,
+                            viewsets.GenericViewSet):
+    serializer_class = PostponedOrderSerializer
+    authentication_classes = (SafeJWTAuthentication,)
+
+    def get_queryset(self):
+        return PostponedOrder.objects.filter(user=self.request.user)
+
+    @action(methods=['post'], detail=False, url_path='create_postponed_order')
+    def create_postponed_order(self, request: Request):
+        user = self.request.user
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save(user=user)
+
+        return Response({'Postponed order created!': True})
