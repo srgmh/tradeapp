@@ -21,6 +21,8 @@ COPY --from=builder /usr/local/lib/python3.11/site-packages /usr/local/lib/pytho
 COPY entrypoint.sh .
 RUN chmod a+x ./entrypoint.sh
 
-COPY . /app
+WORKDIR app/
+
+COPY . .
 
 ENTRYPOINT ["sh",  "entrypoint.sh"]
