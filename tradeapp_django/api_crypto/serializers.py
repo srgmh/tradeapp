@@ -5,11 +5,10 @@ from crypto.models import Asset, Order, Suitcase, Wallet, PostponedOrder
 
 
 class AssetSerializer(serializers.ModelSerializer):
-    users = UserSerializer(many=True)
 
     class Meta:
         model = Asset
-        fields = ('id', 'abbreviation', 'price', 'type', 'users', )
+        fields = ('id', 'abbreviation', 'price', 'type', )
 
 
 class WalletSerializer(serializers.ModelSerializer):

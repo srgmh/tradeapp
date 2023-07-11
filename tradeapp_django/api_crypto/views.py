@@ -9,13 +9,14 @@ from api_crypto.serializers import (AssetSerializer, OrderSerializer,
 from api_crypto.services.assest_service import AssetService
 from api_crypto.services.order_service import OrderService
 from api_users.authentication import SafeJWTAuthentication
-from crypto.models import Order, Suitcase, Wallet, PostponedOrder
+from crypto.models import Order, Suitcase, Wallet, PostponedOrder, Asset
 
 
 class AssetViewSet(viewsets.GenericViewSet,
                    mixins.ListModelMixin,
                    mixins.RetrieveModelMixin):
 
+    queryset = Asset.objects.all()
     serializer_class = AssetSerializer
     authentication_classes = (SafeJWTAuthentication, )
 
