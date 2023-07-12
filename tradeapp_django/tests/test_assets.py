@@ -2,6 +2,8 @@ import pytest
 from django.urls import reverse
 from django.contrib.auth import get_user_model
 
+from crypto.models import Suitcase, Wallet
+
 User = get_user_model()
 
 
@@ -34,6 +36,10 @@ def test_asset_subscribe(api_client, asset, user):
     assert response.json()['success'] is True
     assert response.json()['message'] == 'Subscribed successfully.'
     assert asset.users.filter(id=user.id).exists()
+    assert Wallet.objects.filter(
+        suitcase=user.suitcase,
+        asset=asset,
+    ).exists() is True
 
 
 @pytest.mark.django_db
