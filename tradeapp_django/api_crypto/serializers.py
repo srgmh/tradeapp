@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from api_users.serializers import UserSerializer
-from crypto.models import Asset, Order, Suitcase, Wallet, PostponedOrder
+from crypto.models import Asset, Order, PostponedOrder, Suitcase, Wallet
 
 
 class AssetSerializer(serializers.ModelSerializer):

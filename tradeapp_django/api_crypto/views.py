@@ -5,13 +5,13 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 
 from api_crypto.serializers import (AssetSerializer, OrderSerializer,
-                                    SuitcaseSerializer, WalletSerializer,
-                                    PostponedOrderSerializer)
+                                    PostponedOrderSerializer,
+                                    SuitcaseSerializer, WalletSerializer)
 from api_crypto.services.assest_service import AssetService
 from api_crypto.services.order_service import OrderService
 from api_crypto.services.postponedorder_service import PostponedOrderService
 from api_users.authentication import SafeJWTAuthentication
-from crypto.models import Order, Suitcase, Wallet, PostponedOrder
+from crypto.models import Order, PostponedOrder, Suitcase, Wallet
 
 
 class AssetViewSet(viewsets.GenericViewSet,

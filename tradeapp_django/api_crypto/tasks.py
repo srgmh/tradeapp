@@ -1,5 +1,4 @@
 from celery import shared_task
-
 from django_celery_beat.models import PeriodicTask
 
 from api_crypto.services.postponedorder_service import PostponedOrderService

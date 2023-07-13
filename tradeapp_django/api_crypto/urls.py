@@ -1,8 +1,9 @@
 from django.urls import include, path
 from rest_framework.routers import SimpleRouter
 
-from api_crypto.views import (AssetViewSet, OrderViewSet, SuitcaseViewSet,
-                              WalletViewSet, PostponedOrderViewSet)
+from api_crypto.views import (AssetViewSet, OrderViewSet,
+                              PostponedOrderViewSet, SuitcaseViewSet,
+                              WalletViewSet)
 
 router = SimpleRouter()
 router.register(r'assets', AssetViewSet, basename='assets')

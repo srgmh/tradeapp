@@ -3,7 +3,7 @@ from django.utils import timezone
 from django_celery_beat.models import IntervalSchedule, PeriodicTask
 
 from api_crypto.services.order_service import OrderService
-from crypto.models import PostponedOrder, Order
+from crypto.models import Order, PostponedOrder
 
 
 class PostponedOrderService(OrderService):
