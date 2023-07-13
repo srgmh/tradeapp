@@ -148,10 +148,11 @@ DEBUG_TOOLBAR_CONFIG = {
 
 CELERY_BROKER_URL = 'redis://redis:6379/0'
 CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
-CELERY_BEAT_SCHEDULE = {
-    'process_postponed_orders': {
-        'task': 'api_crypto.tasks.process_postponed_orders',
-        'schedule': 15.0,
-    },
-}
+# CELERY_BEAT_SCHEDULE = {
+#     'process_postponed_orders': {
+#         'task': 'api_crypto.tasks.process_postponed_orders',
+#         'schedule': 15.0,
+#     },
+# }
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True

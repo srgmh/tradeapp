@@ -1,11 +1,28 @@
 from django.db.transaction import atomic
 from django.utils import timezone
+from django_celery_beat.models import IntervalSchedule, PeriodicTask
 
 from api_crypto.services.order_service import OrderService
 from crypto.models import PostponedOrder, Order
 
 
 class PostponedOrderService(OrderService):
+
+    @staticmethod
+    def create_task(postponed_order: PostponedOrder):
+        interval, _ = IntervalSchedule.objects.get_or_create(
+            every=15,
+            period=IntervalSchedule.SECONDS
+        )
+        task = PeriodicTask.objects.create(
+            interval=interval,
+            task='api_crypto.tasks.check_asset_price',
+            args=[postponed_order.id],
+            name=f'Postponed order ID: {postponed_order.id}',
+            enabled=True,
+        )
+        postponed_order.task_id = task.id
+        postponed_order.save()
 
     @staticmethod
     def create_postponed_order(postponed_order: PostponedOrder) -> str:
@@ -38,6 +55,8 @@ class PostponedOrderService(OrderService):
             PostponedOrderService._set_order_progress(
                 postponed_order, False
             )
+            task = PeriodicTask.objects.get(id=postponed_order.task_id)
+            task.delete()
 
             return f"Order {postponed_order.id} successfully executed at {timezone.now()}"
 
