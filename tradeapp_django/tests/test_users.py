@@ -37,5 +37,14 @@ def test_registration_user_with_email_of_existing_user(api_client, user):
     ]
 
 
-# def test_login_user(api_client, user):
-#     url = reverse()
+@pytest.mark.django_db
+def test_login_user(api_client, user):
+    url = reverse('users-login')
+    data = {
+        'email': 'testemail@uu.uu',
+        'password': 'testpassword'
+    }
+    response = api_client.post(url, data)
+    assert response.status_code == 200
+    assert 'access_token' in response.data
+    assert 'refresh_token' in response.data
