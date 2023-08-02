@@ -1,15 +1,14 @@
 from rest_framework import serializers
 
 from api_users.serializers import UserSerializer
-from crypto.models import Asset, Order, Suitcase, Wallet
+from crypto.models import Asset, Order, PostponedOrder, Suitcase, Wallet
 
 
 class AssetSerializer(serializers.ModelSerializer):
-    users = UserSerializer(many=True)
 
     class Meta:
         model = Asset
-        fields = ('id', 'abbreviation', 'price', 'type', 'users', )
+        fields = ('id', 'abbreviation', 'price', 'type', )
 
 
 class WalletSerializer(serializers.ModelSerializer):
@@ -56,3 +55,16 @@ class OrderSerializer(serializers.ModelSerializer):
         fields = ('id', 'user', 'operation_type', 'asset',
                   'quantity', 'timestamp', 'is_completed', )
         read_only_fields = ('user', 'timestamp', 'is_completed')
+
+
+class PostponedOrderSerializer(serializers.ModelSerializer):
+
+    quantity = serializers.DecimalField(max_digits=19, decimal_places=10,
+                                        coerce_to_string=False)
+
+    class Meta:
+        model = PostponedOrder
+        fields = ('id', 'user', 'operation_type', 'asset',
+                  'quantity', 'timestamp',
+                  'price', 'price_way', 'in_progress', 'is_completed',)
+        read_only_fields = ('user', 'timestamp', 'is_completed', 'in_progress')

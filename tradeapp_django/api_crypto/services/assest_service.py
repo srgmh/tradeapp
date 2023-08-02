@@ -23,22 +23,26 @@ class AssetService:
 
     @staticmethod
     def subscribe(asset_id: int, user: User) -> Dict[str, Union[bool, str]]:
-
         if not asset_id:
             raise ValidationError("asset_id is required")
 
         asset = AssetService.get_asset(asset_id)
 
         if AssetService.is_user_subscribed(asset, user):
-            raise ValidationError('You are already subscribed to this asset')
+            return {
+                'success': True,
+                'message': 'You are already subscribed to this asset'
+            }
 
         asset.users.add(user)
 
-        return {'success': True, 'message': 'Subscribed successfully.'}
+        return {
+            'success': True,
+            'message': 'Subscribed successfully.'
+        }
 
     @staticmethod
     def unsubscribe(asset_id: int, user: User) -> Dict[str, Union[bool, str]]:
-
         if not asset_id:
             raise ValidationError("asset_id is required")
 
@@ -46,7 +50,13 @@ class AssetService:
 
         if AssetService.is_user_subscribed(asset, user):
             asset.users.remove(user)
-            return {'success': True, 'message': 'Unsubscribed successfully.'}
+            return {
+                'success': True,
+                'message': 'Unsubscribed successfully.'
+            }
 
         else:
-            raise ValidationError('You are not subscribed to this asset.')
+            return {
+                'success': True,
+                'message': 'You are not subscribed to this asset.'
+            }
