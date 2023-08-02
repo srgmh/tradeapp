@@ -108,9 +108,12 @@ class PostponedOrder(Order):
         verbose_name='Price way', max_length=254,
         choices=PriceWayChoice.choices, blank=False, null=False, )
     expiration_date = models.DateTimeField(
-        verbose_name='Expiration date', )
+        verbose_name='Expiration date', auto_now_add=True,)
     in_progress = models.BooleanField(
         default=True)
+    task_id = models.IntegerField(
+        verbose_name='Task ID', null=True
+    )
 
     class Meta:
         verbose_name_plural = 'PostponedOrders'
