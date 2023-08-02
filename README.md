@@ -11,4 +11,7 @@ POSTGRES_USER=postgres
 POSTGRES_PASSWORD=postgres
 DB_HOST=db
 DB_PORT=5432
+
+# JWT
+JWT_SECRET_KEY=secret
 ```
