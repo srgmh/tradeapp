@@ -26,7 +26,7 @@ class UserViewSet(viewsets.ViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         
-        return Response({'User created!': serializer.data})
+        return Response(serializer.data)
 
     @action(methods=['post'],
             detail=False,
@@ -53,8 +53,7 @@ class UserViewSet(viewsets.ViewSet):
         return Response(
             {
                 'access_token': access_token,
-                'refresh_token': refresh_token,
-                'user_id': UserSerializer(user).data
+                'refresh_token': refresh_token
             }
         )
 

@@ -11,7 +11,7 @@ from api_crypto.services.assest_service import AssetService
 from api_crypto.services.order_service import OrderService
 from api_crypto.services.postponedorder_service import PostponedOrderService
 from api_users.authentication import SafeJWTAuthentication
-from crypto.models import Order, PostponedOrder, Suitcase, Wallet
+from crypto.models import Order, PostponedOrder, Suitcase, Wallet, Asset
 
 
 class AssetViewSet(viewsets.GenericViewSet,
@@ -20,6 +20,7 @@ class AssetViewSet(viewsets.GenericViewSet,
 
     serializer_class = AssetSerializer
     authentication_classes = (SafeJWTAuthentication, )
+    queryset = Asset.objects.all()
 
     @action(methods=['post'], detail=False, url_path='subscribe')
     def subscribe(self, request: Request) -> Response:
