@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, Union
 
 from _decimal import Decimal
 from django.contrib.auth import get_user_model
@@ -43,9 +43,12 @@ class OrderService:
             wallet: Wallet,
             quantity: Decimal,
             suitcase_exchanging_amount: Decimal
-    ) -> Dict[str, bool]:
+    ) -> Dict[str, Union[bool, str]]:
         if wallet.balance < quantity:
-            raise ValidationError('Not enough asset quantity on wallet!')
+            return {
+                'success': False,
+                'message': 'Not enough asset quantity on wallet!'
+            }
         suitcase.balance += suitcase_exchanging_amount
         wallet.balance -= quantity
         suitcase.save()
@@ -62,9 +65,12 @@ class OrderService:
             wallet: Wallet,
             quantity: Decimal,
             suitcase_exchanging_amount: Decimal
-    ) -> Dict[str, bool]:
+    ) -> Dict[str, Union[bool, str]]:
         if suitcase.balance < suitcase_exchanging_amount:
-            raise ValidationError('Not enough balance on suitcase!')
+            return {
+                'success': False,
+                'message': 'Not enough balance on suitcase!'
+            }
         suitcase.balance -= suitcase_exchanging_amount
         wallet.balance += quantity
         suitcase.save()
