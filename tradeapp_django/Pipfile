@@ -1,0 +1,25 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+django = "==4.1"
+djangorestframework = "==3.14"
+psycopg2-binary = "==2.9.6"
+python-dotenv = "==1.0.0"
+isort = "*"
+flake8 = "*"
+black = "*"
+pyjwt = "==2.7.0"
+drf-spectacular = "==0.26.3"
+django-debug-toolbar = "==4.1.0"
+django-celery-beat = "==2.5.0"
+flower = "==2.0.0"
+redis = "==4.6.0"
+pytest-django = "==4.5.2"
+
+[dev-packages]
+
+[requires]
+python_version = "3.11"
